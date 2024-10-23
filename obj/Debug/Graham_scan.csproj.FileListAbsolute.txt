@@ -1,0 +1,11 @@
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\bin\Debug\Graham_scan.exe.config
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\bin\Debug\Graham_scan.exe
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\bin\Debug\Graham_scan.pdb
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.csproj.AssemblyReference.cache
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.csproj.SuggestedBindingRedirects.cache
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.Form1.resources
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.Properties.Resources.resources
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.csproj.GenerateResource.cache
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.csproj.CoreCompileInputs.cache
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.exe
+C:\Users\Дарья\source\repos\Graham_scan\Graham_scan\obj\Debug\Graham_scan.pdb
