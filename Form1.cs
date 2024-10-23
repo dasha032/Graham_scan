@@ -12,11 +12,10 @@ namespace Graham_scan
 {
     public partial class Form1 : Form
     {
-        List<PointF> points = new List<PointF>();
+        List<PointF> points = new List<PointF>();   
         List<PointF> hull = new List<PointF>();
         private int selectedPointIndex = -1;
         bool buildingHull = false;
-        bool moving = false;
         public Form1()
         {
             InitializeComponent();
@@ -79,7 +78,6 @@ namespace Graham_scan
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            //selectedPointIndex = -1;
             if (points.Count == 0)
             {
                 MessageBox.Show("Недостаточно точек для построения");
@@ -104,48 +102,54 @@ namespace Graham_scan
            
             
         }
-        private List<PointF> Graham_Scan()
+        private double Distance(PointF a, PointF b)
         {
-            if (points.Count == 1)
+            return Math.Sqrt((a.X - b.X) * (a.X - b.X) + (a.Y - b.Y) * (a.Y - b.Y));
+        }
+        private List<PointF> Graham_Scan()
+        { 
+            if (points.Count <= 1)
             {
                 hull.Add(points[0]);
                 return hull;
             }
-             
+            List<PointF> sortedPoints = new List<PointF>(points);
             int minIndex = 0;
-            for (int i = 1; i < points.Count(); i++)
+            for (int i = 1; i < sortedPoints.Count(); i++)
             {
-                if (points[i].Y > points[minIndex].Y || points[i].Y == points[minIndex].Y && points[i].X < points[minIndex].X)
+                if (sortedPoints[i].Y > sortedPoints[minIndex].Y || sortedPoints[i].Y == sortedPoints[minIndex].Y && sortedPoints[i].X < sortedPoints[minIndex].X)
                 {
                     minIndex = i;
                 }
             }
-            Swap(points, 0, minIndex);
-            PointF p0 = points[0];
-            for (int i = 2; i < points.Count; i++)
+            Swap(sortedPoints, 0, minIndex);
+            PointF p0 = sortedPoints[0];
+
+            for (int i = 2; i < sortedPoints.Count; i++)
             {
                 int j = i;
-                while (j > 1 && Rotate(p0, points[j - 1], points[j]) < 0)
+                while (j > 1 && (Rotate(p0, sortedPoints[j - 1], sortedPoints[j]) < 0 || 
+                      (Rotate(p0, sortedPoints[j - 1], sortedPoints[j]) == 0) && Distance(p0, sortedPoints[j - 1]) > Distance(p0, sortedPoints[j])))
                 {
-                    Swap(points, j, j - 1);
+                    Swap(sortedPoints, j, j - 1);
                     j--;
                 }
             }
             hull.Clear();
-            hull.Add(points[0]);
-            hull.Add(points[1]);
+            hull.Add(sortedPoints[0]);
+            hull.Add(sortedPoints[1]);
 
 
             // Проходим по оставшимся точкам
-            for (int i = 2; i < points.Count(); i++)
+            for (int i = 2; i < sortedPoints.Count(); i++)
             {
                 // Удаляем вершины из стека, пока они образуют поворот вправо
-                while (hull.Count() > 1 && Rotate(hull[hull.Count() - 2], hull[hull.Count() - 1], points[i]) <= 0)
+                while (hull.Count() > 1 && Rotate(hull[hull.Count() - 2], hull[hull.Count() - 1], sortedPoints[i]) <= 0)
                 {
                     hull.RemoveAt(hull.Count() - 1);
                 }
                 // Добавляем текущую точку в стек
-                hull.Add(points[i]);
+                hull.Add(sortedPoints[i]);
             }
             return hull;
 
@@ -172,42 +176,16 @@ namespace Graham_scan
         {
             if (selectedPointIndex >= 0 && e.Button == MouseButtons.Left)
             {
-                moving = true;
-                PointF oldpoint = points[selectedPointIndex];
                 // Перемещаем выбранную точку
                 points[selectedPointIndex] = new PointF(e.X, e.Y);
-                if (buildingHull /*&& hull.Contains(oldpoint)*/)
-                    hull = Graham_Scan();  
-                    //hull = UpdateHullAfterMove(points[selectedPointIndex]);
+                if (buildingHull)
+                    hull = Graham_Scan();    
                 pictureBox1.Invalidate(); // Перерисовать PictureBox
-                moving = false;
             }
         }
-        private List<PointF> UpdateHullAfterMove(PointF movedPoint)
-        {
-            // Найти индекс перемещаемой точки в текущей оболочке
-            int indexInHull = hull.IndexOf(movedPoint);
-
-            // Если точка была на оболочке
-            if (indexInHull != -1)
-            {
-                // Удалить точку из оболочки
-                hull.RemoveAt(indexInHull);
-
-                // Добавить новую позицию перемещаемой точки
-                hull.Add(points[selectedPointIndex]);
-
-                // Пересчитать выпуклую оболочку с учётом новой точки
-                hull = Graham_Scan();
-            }
-
-            // Вернуть обновлённую оболочку
-            return hull;
-        }
-
+        
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
-        {
-           
+        {     
             selectedPointIndex = -1; // Сбрасываем выбранную точку
         }
 
